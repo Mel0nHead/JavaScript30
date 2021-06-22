@@ -59,23 +59,35 @@
         position: absolute;
         top: 50%;
       }
+
+      .second-hand,
+      .min-hand,
+      .hour-hand {
+        transform-origin: right;
+      }
     </style>
 
     <script>
-      // get the current time and extract the hours, minutes and seconds
-      const now = new Date();
-      const hours = now.getHours();
-      const minutes = now.getMinutes();
-      const seconds = now.getSeconds();
+      function moveHand(value, selector, interval) {
+        const angle = interval * value + 90; // need to add 90 degrees because all 3 hands start at 9
+        const hand = document.querySelector(selector);
+        hand.style.transform = `rotate(${angle}deg)`;
+      }
 
-      const secondInterval = 360 / 60;
-      const secondsAngle = secondInterval * seconds;
+      function updateClock() {
+        const now = new Date();
+        const [hours, minutes, seconds] = [
+          now.getHours(),
+          now.getMinutes(),
+          now.getSeconds(),
+        ];
 
-      console.log({ seconds, secondsAngle });
-      // work out the angle required for hour, minute and second hand based off time
-      // apply the following css to each hand:
-      // transform: rotate(188deg); (degree angle will depend on time)
-      // transform-origin: right;
+        moveHand(seconds, ".second-hand", 360 / 60);
+        moveHand(minutes, ".min-hand", 360 / 60);
+        moveHand(hours, ".hour-hand", 360 / 12);
+      }
+
+      setInterval(updateClock, 1000);
     </script>
   </body>
 </html>
