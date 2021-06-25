@@ -1,22 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Type Ahead 👀</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Type Ahead 👀</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <form class="search-form">
+      <input type="text" class="search" placeholder="City or State" />
+      <ul class="suggestions">
+        <li>Filter for a city</li>
+        <li>or a state</li>
+      </ul>
+    </form>
+    <script>
+      // TODO:
+      // format list items nicely
+      // add highlight to matched string in each list item
+      let CITIES = [];
+      const API_ENDPOINT =
+        "https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json";
 
-  <form class="search-form">
-    <input type="text" class="search" placeholder="City or State">
-    <ul class="suggestions">
-      <li>Filter for a city</li>
-      <li>or a state</li>
-    </ul>
-  </form>
-<script>
-const endpoint = 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+      function fetchData(url) {
+        fetch(url)
+          .then((response) => response.json())
+          .then((data) => {
+            CITIES = data;
+          })
+          .catch((e) => console.log(e));
+      }
 
-</script>
-</body>
+      function createListItem({ city, state, population }) {
+        const li = document.createElement("li");
+        li.append(`${city}, ${state} ${population}`);
+        return li;
+      }
+
+      function showFilteredResults(cities) {
+        const listItems = cities.map((city) => createListItem(city));
+        const suggestions = document.querySelector(".suggestions");
+        while (suggestions.firstChild) {
+          suggestions.removeChild(suggestions.lastChild);
+        }
+        suggestions.append(...listItems);
+      }
+
+      function filterResults(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const filteredCities = CITIES.filter(
+          ({ city, state }) =>
+            city.toLowerCase().includes(searchTerm) ||
+            state.toLowerCase().includes(searchTerm)
+        );
+        showFilteredResults(filteredCities);
+      }
+
+      fetchData(API_ENDPOINT);
+      const searchInput = document.querySelector(".search");
+      searchInput.addEventListener("input", filterResults);
+    </script>
+  </body>
 </html>
