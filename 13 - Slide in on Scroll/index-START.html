@@ -47,7 +47,7 @@
         dignissimos.
       </p>
 
-      <!-- <img src="http://unsplash.it/400/400" class="align-left slide-in" /> -->
+      <img src="http://unsplash.it/400/400" class="align-left slide-in" />
 
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptates,
@@ -101,7 +101,7 @@
         quaerat voluptatem rerum natus magni. Eum amet autem dolor ullam.
       </p>
 
-      <!-- <img src="http://unsplash.it/200/500" class="align-left slide-in" /> -->
+      <img src="http://unsplash.it/200/500" class="align-left slide-in" />
 
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio
@@ -109,7 +109,7 @@
         Quibusdam saepe aperiam explicabo placeat optio, consequuntur nihil
         voluptatibus expedita quia vero perferendis, deserunt et incidunt
         eveniet
-        <!-- <img src="http://unsplash.it/200/200" class="align-right slide-in" /> -->
+        <img src="http://unsplash.it/200/200" class="align-right slide-in" />
         temporibus doloremque possimus facilis. Possimus labore, officia dolore!
         Eaque ratione saepe, alias harum laboriosam deserunt laudantium
         blanditiis eum explicabo placeat reiciendis labore iste sint.
@@ -145,7 +145,7 @@
         facere ducimus accusantium eos veritatis neque.
       </p>
 
-      <!-- <img src="http://unsplash.it/400/400" class="align-right slide-in" /> -->
+      <img src="http://unsplash.it/400/400" class="align-right slide-in" />
 
       <p>
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio
@@ -247,11 +247,10 @@
           const isAboveViewport = rect.top < 0 && rect.bottom < 0;
           const isBelowVieport = rect.top > windowHeight;
           const isInViewport = !isAboveViewport && !isBelowVieport;
-          // TODO: add transition effect when img is in viewport
-          console.log({
-            img,
-            isInViewport,
-          });
+
+          if (isInViewport) {
+            img.classList.add("active");
+          }
         });
       }
 
