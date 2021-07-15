@@ -44,9 +44,7 @@
     <div class="wrapper">
       <h2>LOCAL TAPAS</h2>
       <p></p>
-      <ul class="plates">
-        <li>Loading Tapas...</li>
-      </ul>
+      <ul class="plates"></ul>
       <form class="add-items">
         <input type="text" name="item" placeholder="Item Name" required />
         <input type="submit" value="+ Add Item" />
@@ -59,16 +57,51 @@
       // you can straight away click on a newly added list item
       const addItemsForm = document.querySelector(".add-items");
       const itemsList = document.querySelector(".plates");
-      const items = [];
+      const items = JSON.parse(localStorage.getItem("food")) ?? [];
+
+      const listItems = items.map(convertItemToListItem);
+      itemsList.append(...listItems);
 
       function handleSubmit(e) {
         e.preventDefault();
         const value = addItemsForm.querySelector("input[type='text']").value;
-        items.push({
+
+        const newItem = {
           name: value,
           checked: false,
-        });
+        };
+
+        items.push(newItem);
+        localStorage.setItem("food", JSON.stringify(items));
+        appendListItems(newItem);
         addItemsForm.reset();
+      }
+
+      function convertItemToListItem(item) {
+        const li = document.createElement("li");
+        const label = document.createElement("label");
+        const text = document.createTextNode(item.name);
+        const input = document.createElement("input");
+        input.setAttribute("type", "checkbox");
+
+        if (item.checked) {
+          input.setAttribute("checked", "");
+        }
+
+        label.appendChild(text);
+        li.append(input, label);
+        li.addEventListener("click", function () {
+          // TODO: need to update list item and also corresponding item in local storage when clicked
+          console.log(
+            this.querySelector("input[type='checkbox']").hasAttribute("checked")
+          );
+        });
+        return li;
+      }
+
+      function appendListItems(item) {
+        const li = convertItemToListItem(item);
+        itemsList.append(li);
       }
 
       addItemsForm.addEventListener("submit", handleSubmit);
