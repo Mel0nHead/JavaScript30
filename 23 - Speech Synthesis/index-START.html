@@ -65,6 +65,13 @@
 
       window.speechSynthesis.onvoiceschanged = loadVoices;
       voicesDropdown.addEventListener("change", handleVoiceChange);
+      speakButton.addEventListener("click", function () {
+        console.log(utterance);
+        window.speechSynthesis.speak(utterance);
+      });
+      // rate.addEventListener("input", function (e) {
+      //   utterance.rate = e.target.value;
+      // });
     </script>
   </body>
 </html>
