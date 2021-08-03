@@ -1,48 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Understanding JavaScript's Capture</title>
-</head>
-<body class="bod">
-
-  <div class="one">
-    <div class="two">
-      <div class="three">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Understanding JavaScript's Capture</title>
+  </head>
+  <body class="bod">
+    <div class="one" id="div one">
+      <div class="two" id="div two">
+        <div class="three" id="div three">
+          <button id="button">click me</button>
+        </div>
       </div>
     </div>
-  </div>
 
-<style>
-  html {
-    box-sizing: border-box;
-  }
-  
-  *, *:before, *:after { 
-    box-sizing: inherit; 
-  }
+    <style>
+      html {
+        box-sizing: border-box;
+      }
 
-  div {
-    width: 100%;
-    padding: 100px;
-  }
+      *,
+      *:before,
+      *:after {
+        box-sizing: inherit;
+      }
 
-  .one {
-    background: thistle;
-  }
+      div {
+        width: 100%;
+        padding: 100px;
+      }
 
-  .two {
-    background: mistyrose;
-  }
+      .one {
+        background: thistle;
+      }
 
-  .three {
-    background: coral;
-  }
-</style>
+      .two {
+        background: mistyrose;
+      }
 
-<button></button>
-<script>
+      .three {
+        background: coral;
+      }
+    </style>
 
-</script>
-</body>
+    <button></button>
+    <script>
+      const divs = document.querySelectorAll("div");
+      const button = document.querySelector("#button");
+
+      function handleClick(e) {
+        console.log(this.id);
+      }
+
+      function logOnce() {
+        console.log("logging for one time only");
+      }
+
+      divs.forEach((div) => div.addEventListener("click", handleClick));
+      button.addEventListener("click", function () {
+        console.log("button clicked");
+      });
+
+      button.addEventListener("click", logOnce, { once: true });
+    </script>
+  </body>
 </html>
