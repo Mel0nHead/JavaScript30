@@ -1,7 +1,14 @@
-// clicking the buttons starts the timer (with specified time amount)
-// it also displays the time that the timer will run out at
+const timeRemaining = document.querySelector(".display__time-left");
+const endTime = document.querySelector(".display__end-time");
+const buttons = document.querySelectorAll(".timer__button");
 
-function getFinishTime(minutes, seconds) {
+const INTERVALS_ARRAY = [];
+
+function padNumber(num) {
+  return num < 10 ? `0${num}` : `${num}`;
+}
+
+function updateEndTimeDisplay(minutes, seconds) {
   const now = new Date();
   const secs = now.getSeconds() + seconds;
   const mins = now.getMinutes() + minutes;
@@ -9,30 +16,55 @@ function getFinishTime(minutes, seconds) {
   const totalHours = now.getHours() + Math.floor(mins / 60);
   const totalMins = (mins % 60) + Math.floor(secs / 60);
 
-  return `${totalHours}:${totalMins < 10 ? 0 : ""}${totalMins}`;
+  endTime.textContent = `${totalHours}:${padNumber(totalMins)}`;
 }
 
-// hh:mm:ss
-function startTimer({ minutes, seconds }) {
-  //   const finishTime = getFinishTime(minutes, seconds);
+function convertSecondsToMinutesAndSeconds(totalSeconds) {
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  return { minutes, seconds };
+}
 
-  let remainingMinutes = minutes + Math.floor(seconds / 60);
-  let remainingSeconds = seconds % 60;
+function updateTimerDisplay(minutes, seconds) {
+  timeRemaining.textContent = `${minutes}:${padNumber(seconds)}`;
+}
 
-  setInterval(() => {
+function createTimerInterval(minutes, seconds) {
+  const interval = setInterval(timer, 1000);
+  INTERVALS_ARRAY.push(interval);
+
+  let remainingMinutes = minutes;
+  let remainingSeconds = seconds;
+
+  function timer() {
     if (!remainingSeconds && !remainingMinutes) {
-      console.log("timer finished");
+      clearInterval(interval);
       return;
     }
 
     if (!remainingSeconds) {
       remainingMinutes -= 1;
       remainingSeconds = 59;
-      console.log(`${remainingMinutes}:${remainingSeconds}`);
-      return;
+    } else {
+      remainingSeconds -= 1;
     }
 
-    remainingSeconds -= 1;
-    console.log(`${remainingMinutes}:${remainingSeconds}`);
-  }, 1000);
+    updateTimerDisplay(remainingMinutes, remainingSeconds);
+  }
 }
+
+function startTimer(totalSeconds) {
+  INTERVALS_ARRAY.forEach((interval) => clearInterval(interval));
+  const { minutes, seconds } = convertSecondsToMinutesAndSeconds(totalSeconds);
+
+  updateEndTimeDisplay(minutes, seconds);
+  updateTimerDisplay(minutes, seconds);
+  createTimerInterval(minutes, seconds);
+}
+
+buttons.forEach((button) => {
+  const seconds = Number(button.dataset.time);
+  button.addEventListener("click", () => {
+    startTimer(seconds);
+  });
+});
